@@ -1,6 +1,6 @@
 # esp
 
-A esp8266 arduino access point maker. 
+A esp8266 arduino access point maker, to fake multiple routers with given mac adress. 
 
 It creates multiple wifi access points to fake a location on your mobile phone (you need to disable gps, in a building for example)
 
