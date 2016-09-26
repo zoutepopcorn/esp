@@ -47,7 +47,7 @@ unsigned int hexToDec(String hexString) {
 }
 
 void spoofMac(String str) {
-    packet[10] = packet[16] = hexToDec(str.substring(0, 2));//random(256);
+    packet[10] = packet[16] = hexToDec(str.substring(0, 2));
     packet[11] = packet[17] = hexToDec(str.substring(3, 5));
     packet[12] = packet[18] = hexToDec(str.substring(6, 8));
     packet[13] = packet[19] = hexToDec(str.substring(9, 11));
@@ -63,7 +63,6 @@ void loop() {
     wifi_set_channel(channel);
 
     spoofMac(macs[nr]);
-    // Randomize SSID (Fixed size 6. Lazy right?)
     packet[38] = 'a';
     packet[39] = 'a';
     packet[40] = 'a';
