@@ -7,7 +7,9 @@ extern "C" {
 String alfa = "1234567890qwertyuiopasdfghjkklzxcvbnm QWERTYUIOPASDFGHJKLZXCVBNM_";
 byte channel;
 int nr = 0;
+// SET YOUR MAC ADRESSES IN THIS FORM { "AA BB CC DD EE FF" , "11 22 33 44 55 66"}
 char *macs[] = { "26 CE 4A EF E1 A0", "4C AC 0A 15 98 10", "DC 71 44 70 23 58", "24 A2 E1 EF 4A CE"}; 
+int nrMacs = 4;
 
 // Beacon Packet buffer
 uint8_t packet[128] = { 0x80, 0x00, 0x00, 0x00, 
@@ -58,7 +60,7 @@ void spoofMac(String str) {
 
 void loop() {
     // Randomize channel //
-    if(nr > 3) { nr = 0;  }
+    if(nr > nrMacs - 1) { nr = 0;  }
     channel = random(1,12); 
     wifi_set_channel(channel);
 
