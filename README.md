@@ -6,5 +6,8 @@ It creates multiple wifi access points to fake a location on your mobile phone (
 
 See www.wigle.net for a list ap's on a location.
 
+The project is based on this code: http://hackaday.com/2016/01/14/inject-packets-with-an-esp8266/
+![alt tag](https://hackadaycom.files.wordpress.com/2016/01/wifi_beacon-shot0004_featured.png?w=800)
 
-[img=https://hackadaycom.files.wordpress.com/2016/01/wifi_beacon-shot0004_featured.png?w=800]
+Set your wifi mac adresses with Wiggle
+![alt tag](http://noquest.com/network/locating-stolen-ap/wardrive-map-girona2.jpg)
