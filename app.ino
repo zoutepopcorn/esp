@@ -8,9 +8,6 @@ extern "C" {
 
 int c = 16;
 int chr = 0;
-String tmp = "";
-String ph = " #--"; //Placeholder
-
 int nr = 0;
 char *macs[] = { "26 CE 4A EF E1 A0", "4C AC 0A 15 98 10", "DC 71 44 70 23 58", "24 A2 E1 EF 4A CE"};
 int nrMacs = 4;
