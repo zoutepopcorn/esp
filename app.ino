@@ -1,38 +1,45 @@
+#include <Arduino.h>
+
 #include <ESP8266WiFi.h>
 
 extern "C" {
-  #include "user_interface.h"
+#include "user_interface.h"
 }
 
-String alfa = "1234567890qwertyuiopasdfghjkklzxcvbnm QWERTYUIOPASDFGHJKLZXCVBNM_";
-byte channel;
+int c = 16;
+int chr = 0;
+String tmp = "";
+String ph = " #--"; //Placeholder
+
 int nr = 0;
-// SET YOUR MAC ADRESSES IN THIS FORM { "AA BB CC DD EE FF" , "11 22 33 44 55 66"}
-char *macs[] = { "26 CE 4A EF E1 A0", "4C AC 0A 15 98 10", "DC 71 44 70 23 58", "24 A2 E1 EF 4A CE"}; 
+char *macs[] = { "26 CE 4A EF E1 A0", "4C AC 0A 15 98 10", "DC 71 44 70 23 58", "24 A2 E1 EF 4A CE"};
 int nrMacs = 4;
 
-// Beacon Packet buffer
-uint8_t packet[128] = { 0x80, 0x00, 0x00, 0x00, 
-                /*4*/   0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
-                /*10*/  0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
-                /*16*/  0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 
-                /*22*/  0xc0, 0x6c, 
-                /*24*/  0x83, 0x51, 0xf7, 0x8f, 0x0f, 0x00, 0x00, 0x00, 
-                /*32*/  0x64, 0x00, 
-                /*34*/  0x01, 0x04, 
-                /* SSID */
-                /*36*/  0x00, 0x06, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72,
-                        0x01, 0x08, 0x82, 0x84,
-                        0x8b, 0x96, 0x24, 0x30, 0x48, 0x6c, 0x03, 0x01, 
-                /*56*/  0x04};                       
+String text[4] = {"wedstrijd", "echt wel", "jaja", "prut"};
+byte channel;
 
+// Beacon Packet buffer
+uint8_t packet[128] = { 0x80, 0x00, 0x00, 0x00,
+                        /*4*/   0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+                        /*10*/  0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                        /*16*/  0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                        /*22*/  0xc0, 0x6c,
+                        /*24*/  0x83, 0x51, 0xf7, 0x8f, 0x0f, 0x00, 0x00, 0x00,
+                        /*32*/  0x64, 0x00,
+                        /*34*/  0x01, 0x04,
+                        /* SSID */
+                        /*36*/  0x00, 0x0e, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72,
+                        0x01, 0x08, 0x82, 0x84,
+                        0x8b, 0x96, 0x24, 0x30, 0x48, 0x6c, 0x03, 0x01,
+                        /*65*/  0x04
+                      };
 
 void setup() {
   delay(500);
   wifi_set_opmode(STATION_MODE);
-  wifi_promiscuous_enable(1); 
+  wifi_promiscuous_enable(1);
+  Serial.begin(115200);
 }
-
 
 unsigned int hexToDec(String hexString) {
   unsigned int decValue = 0;
@@ -58,25 +65,29 @@ void spoofMac(String str) {
 }
 
 
-void loop() {
-    // Randomize channel //
-    if(nr > nrMacs - 1) { nr = 0;  }
-    channel = random(1,12); 
-    wifi_set_channel(channel);
 
-    spoofMac(macs[nr]);
-    packet[38] = 'a';
-    packet[39] = 'a';
-    packet[40] = 'a';
-    packet[41] = 'a';
-    packet[42] = alfa[random(4)];
-    packet[43] = alfa[random(2)];
-    
-    packet[56] = channel;
-    
-    wifi_send_pkt_freedom(packet, 57, 0);
-    wifi_send_pkt_freedom(packet, 57, 0);
-    wifi_send_pkt_freedom(packet, 57, 0);
-    delay(1);
-    nr++;
+void loop() {
+  if(nr > nrMacs - 1) { nr = 0;  }
+
+  channel = random(1, 12);
+  wifi_set_channel(channel);
+
+  spoofMac(macs[nr]);
+
+  for (int i = 41; i <= 52; i++) {
+    packet[i] = ' ';
+  }
+
+  int pcount = 38;
+  for(int i=0; i < text[c].length(); i++){
+      packet[pcount] = text[c][i];
+      pcount++;
+  }
+
+  wifi_send_pkt_freedom(packet, 57, 0);
+  wifi_send_pkt_freedom(packet, 57, 0);
+  wifi_send_pkt_freedom(packet, 57, 0);
+  wifi_send_pkt_freedom(packet, 57, 0);
+
+  delay(1);
 }
